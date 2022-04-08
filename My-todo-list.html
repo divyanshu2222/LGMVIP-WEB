@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <script src="https://kit.fontawesome.com/2b070e02a1.js" crossorigin="anonymous"></script>
+    <title>My-To-Do-List</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+}
+
+.container {
+    background: linear-gradient(#7081b9, #212A4A);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.todo-list {
+    background: #28365f;
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    max-width: 600px;
+    border-radius: 10px;
+    height: 500px;
+    box-shadow: 0px 0px 20px #171f33;
+}
+
+.header {
+    padding: 2em;
+}
+
+.header h1 {
+    color: #848db3;
+    text-align: center;
+}
+
+.list {
+    flex-grow: 1;
+    padding: 2em;
+    overflow-y: scroll;
+}
+
+.list ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: #CCC;
+}
+
+.delete {
+    cursor: pointer;
+}
+
+.list ul li i {
+    cursor: pointer;
+    color: #848db3;
+    padding: 1em;
+}
+
+.list ul li i:hover {
+    color: #EF5350;
+}
+
+.add-task {
+    padding: 2em;
+    display: flex;
+}
+
+/* Input Box */
+.add-task input {
+    border: 1px solid #EEE;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    flex-grow: 1;
+    padding: 1em;
+    outline: none;
+    background: #d8dbe9;
+}
+
+.add-task input:hover {
+    border: 1px solid rgb(236, 231, 231);
+}
+
+.add-task input:active {
+    border: 1px solid #a09e9e;
+}
+
+.add-task input:focus {
+    border: 1px solid #1e7dca;
+}
+
+/* Button */
+.add-task button {
+    outline: none;
+    border: none;
+    padding: 1em;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: #1e7dca;
+    color: white;
+    cursor: pointer;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #8997bd;
+    border: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #272a2c;
+    border-radius: 10px;
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="todo-list">
+            <div class="header">
+                <h1>Todo-List</h1>
+                <h1><span id="total-tasks">0</span><span> Tasks</span></h1>
+            </div>
+
+            <div class="list">
+                <ul></ul>
+            </div>
+
+            <form class="add-task">
+                <input type="text" name="" id="">
+                <button>
+                    <i class="fas fa-plus"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- <script src="script.js"></script> -->
+    <script>
+        let inputElement = document.querySelector('input');
+let formElement = document.querySelector('form');
+let listElement = document.querySelector('ul');
+let totalTasksElement = document.querySelector('#total-tasks');
+
+
+let taskList = [
+    'Go to Gym',
+    'Buy Vegetables'
+];
+
+function deleteItem(e) {
+    let task = e.target.parentElement.previousElementSibling.innerHTML;
+    let index = taskList.indexOf(task);
+    if (index !== -1) {
+        taskList.splice(index, 1);
+    }
+    populateList();
+}
+
+function populateList() {
+    listElement.innerHTML = '';
+    taskList.forEach(function (item) {
+        let newItem = document.createElement('li');
+
+        // Add new span for text
+        let span = document.createElement('span');
+        span.innerHTML = item;
+        newItem.appendChild(span);
+
+        // Add delete button
+        let anchorElement = document.createElement('a');
+        anchorElement.classList.add('delete');
+        anchorElement.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        newItem.appendChild(anchorElement);
+
+        anchorElement.addEventListener('click', (e) => deleteItem(e));
+        // Add li to ul
+        listElement.appendChild(newItem);
+    });
+    totalTasksElement.innerHTML = taskList.length;
+    // inputElement.value = '';
+}
+populateList();
+
+function doesnothavewhitespaces(s) {
+    let stringwithoutspce = s.trim();
+    return stringwithoutspce.length > 0;
+}
+
+function addTask() {
+    if (inputElement.value && doesnothavewhitespaces(inputElement.value) && !taskList.includes(inputElement.value)) {
+        taskList.push(inputElement.value);
+        populateList();
+    }
+    inputElement.value = '';
+}
+formElement.addEventListener('submit', function (e) {
+    e.preventDefault();
+    addTask();
+});
+    </script>
+</body>
+
+</html>
